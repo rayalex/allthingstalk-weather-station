@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CREDENTIALS_H
+#define CREDENTIALS_H
 
 // Set these values according to your SmartLiving device
 #define DEVICE_ID "YOUR-DEVICE-ID-HERE"
@@ -8,3 +9,5 @@
 // Your WiFi credentials
 #define WIFI_SSID "YOUR-WIFI-SSID"
 #define WIFI_PASS "YOUR-WIFI-PASSWORD"
+
+#endif
