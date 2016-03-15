@@ -5,12 +5,11 @@
 #include <espduino.h>
 #include <mqtt.h>
 #include <rest.h>
-#include <fp.h>
 
 #define MQTT_BROKER "broker.smartliving.io"
 #define API_HOST "api.smartliving.io"
 
-#define LOG(x) (_debug->println(x)) // TODO: null check
+#define LOG(x) (invokeLogging(x))
 
 enum AssetType {
   sensor,
@@ -23,18 +22,22 @@ struct DeviceInfo {
   const char* clientKey;
 };
 
-typedef struct Command {
+struct Command {
   String name;
-  String data;
+  String value;
 };
+
+typedef void (*CommandHandler) (Command);
+typedef void (*ConnectHandler) (void);
+typedef void (*LoggingHandler) (const char*);
 
 class Device {
   public:
-    Device(ESP &esp, MQTT &mqtt, REST &rest, DeviceInfo device, Stream *debug);
+    Device(ESP &esp, MQTT &mqtt, REST &rest, DeviceInfo device);
 
     void connect();
-    void addAsset(const char *name, const AssetType type, const char *profileType) const;
     void send(const char *name, const char *value) const;
+    void addAsset(const char *name, const AssetType type, const char *profileType) const;
 
     void process() {
       _esp.process();
@@ -44,8 +47,17 @@ class Device {
       return _wifiConnected;
     }
 
-    FP<void, void*> deviceConnected;
-    FP<void, Command> onCommand;
+    void setCommandHandler(CommandHandler handler) {
+      _hCommand = handler;
+    }
+
+    void setConnectHandler(ConnectHandler handler) {
+      _hConnect = handler;
+    }
+
+    void setLoggingHandler(LoggingHandler handler) {
+      _hLogging = handler;
+    }
 
   private:
     void mqttConnected(void*);
@@ -54,12 +66,20 @@ class Device {
     void mqttData(void*);
     void wifiCb(void*);
 
+    void invokeCommand(Command) const;
+    void invokeConnect() const;
+    void invokeLogging(const char*) const;
+
     const char* assetTypeToString(uint8_t assetType) const {
       return (const char *[]) {
         "sensor",
         "actuator"
       }[assetType];
     }
+
+    CommandHandler _hCommand;
+    ConnectHandler _hConnect;
+    LoggingHandler _hLogging;
 
     Stream *_debug;
     ESP &_esp;

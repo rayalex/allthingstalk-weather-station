@@ -1,14 +1,15 @@
 #include "device.h"
 #include <ArduinoJson.h>
 
-Device::Device(ESP &esp, MQTT &mqtt, REST &rest, DeviceInfo device, Stream *debug):
+Device::Device(ESP &esp, MQTT &mqtt, REST &rest, DeviceInfo device):
   _esp(esp), _mqtt(mqtt), _rest(rest),
   _deviceId(device.deviceId),
   _clientId(device.clientId),
-  _clientKey(device.clientKey),
-  _debug(debug) { }
+  _clientKey(device.clientKey) { }
 
 void Device::connect() {
+
+  // connect to MQTT broker
   char user[32];
   sprintf(user, "%s:%s", _clientId, _clientId);
   LOG("Setting up MQTT client...");
@@ -17,6 +18,10 @@ void Device::connect() {
     while (1);
   }
 
+  // setup rest
+  _rest.begin(API_HOST);
+  _rest.setContentType("application/json");
+  
   /*setup mqtt events */
   _mqtt.connectedCb.attach(this, &Device::mqttConnected);
   _mqtt.disconnectedCb.attach(this, &Device::mqttDisconnected);
@@ -42,7 +47,7 @@ void Device::addAsset(const char *name, const AssetType type, const char *profil
   char header[128];
   char body[128];
 
-  root.printTo(body, sizeof(body));  
+  root.printTo(body, sizeof(body));
   int contentLength = strlen(body);
 
   // We're authorizing using Auth-ClientId and Auth-ClientKey headers on /device/:id/asset/:name URI
@@ -90,18 +95,17 @@ void Device::mqttData(void* response) {
 
   LOG("Received: topic=");
   String topic = res.popString();
-  LOG(topic);
+  LOG(topic.c_str());
 
   LOG("data=");
   String data = res.popString();
-  LOG(data);
+  LOG(data.c_str());
 
   uint8_t start = topic.indexOf("asset/") + 6;
   uint8_t end = topic.lastIndexOf("/command");
 
-  Command cmd = {topic.substring(start, end), data};  
-  this->onCommand(cmd);
-  LOG(topic.substring(start, end));
+  Command cmd = {topic.substring(start, end), data};
+  if (_hCommand) _hCommand(cmd);
 }
 
 void Device::wifiCb(void* response) {
@@ -115,10 +119,7 @@ void Device::wifiCb(void* response) {
 
       // callback to program to allow it
       // to handle it's tasks on connection
-
-      _rest.begin(API_HOST);
-      _rest.setContentType("application/json");
-      this->deviceConnected(response);
+      invokeConnect();
 
       _mqtt.connect(MQTT_BROKER, 1883);
       _wifiConnected = true;
@@ -127,5 +128,17 @@ void Device::wifiCb(void* response) {
       _mqtt.disconnect();
     }
   }
+}
+
+void Device::invokeCommand(const Command command) const {
+  if (_hCommand) _hCommand(command);
+}
+
+void Device::invokeConnect() const {
+  if (_hConnect) _hConnect();
+}
+
+void Device::invokeLogging(const char* message) const {
+  if (_hLogging) _hLogging(message);
 }
 

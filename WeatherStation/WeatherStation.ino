@@ -1,4 +1,3 @@
-#include <ArduinoJson.h>
 #include <espduino.h>
 #include <mqtt.h>
 #include <rest.h>
@@ -11,10 +10,6 @@
 
 #define LED_A 38
 #define LED_C 39
-
-// SmartLiving endpoints
-#define MQTT_BROKER "broker.smartliving.io"
-#define API_HOST "api.smartliving.io"
 
 const uint8_t BME_ADDR = 0x76;
 const float   SEALEVELPRESSURE_HPA = 1013.25;
@@ -34,8 +29,9 @@ ESP esp(data, debug, 4);
 REST rest(&esp);
 MQTT mqtt(&esp);
 
+// SmartLiving stuff
 DeviceInfo info = {DEVICE_ID, CLIENT_ID, CLIENT_KEY};
-Device device(esp, mqtt, rest, info, debug);
+Device device(esp, mqtt, rest, info);
 
 // Sensors
 Adafruit_BME280 bme;  // on I2C
@@ -49,18 +45,17 @@ void setupAssets() {
   device.addAsset(A_LED, AssetType::actuator, "boolean");
 }
 
-void deviceConnected(void*) {
+void deviceConnected() {
   setupAssets();
 }
 
 void onCommand(Command command) {
-  
+  if (command.name == A_LED) {
+    digitalWrite(LED_A, command.value == "true");
+  }
 }
-
-void mqttData(void* response)
-{
-
-  //digitalWrite(LED_A, data == "true");
+void log(const char* message) {
+  debug->println(message);
 }
 
 void setup() {
@@ -83,8 +78,9 @@ void setup() {
   delay(500);
   while (!esp.ready());
 
-  device.deviceConnected.attach(&deviceConnected);
-  device.onCommand.attach(&onCommand);
+  device.setLoggingHandler(&log);
+  device.setConnectHandler(&deviceConnected);
+  device.setCommandHandler(&onCommand);
   device.connect();
 
   esp.wifiConnect(WIFI_SSID, WIFI_PASS);
@@ -104,7 +100,7 @@ void sense() {
   float pressure = bme.readPressure() / 100.0F;
   float altitude = bme.readAltitude(SEALEVELPRESSURE_HPA);
   float humidity = bme.readHumidity();
-  
+
   device.send(S_TMP, toString(temperature));
   device.send(S_PSA, toString(pressure));
   device.send(S_HUM, toString(humidity));
