@@ -78,6 +78,8 @@ void setup() {
   delay(500);
   while (!esp.ready());
 
+  // setup ATT device
+  device.setAutoEcho(true);
   device.setLoggingHandler(&log);
   device.setConnectHandler(&deviceConnected);
   device.setCommandHandler(&onCommand);

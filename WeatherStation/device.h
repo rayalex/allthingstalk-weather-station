@@ -23,6 +23,9 @@ struct DeviceInfo {
 };
 
 struct Command {
+  Command(String name, String value):
+    name(name), value(value) {}
+
   String name;
   String value;
 };
@@ -45,6 +48,10 @@ class Device {
 
     inline bool isConnected() const {
       return _wifiConnected;
+    }
+
+    inline bool setAutoEcho(bool echo) {
+      _autoEcho = echo;
     }
 
     void setCommandHandler(CommandHandler handler) {
@@ -91,6 +98,7 @@ class Device {
     const char *_clientKey;
 
     bool _wifiConnected = false;
+    bool _autoEcho = false;
 };
 
 #endif

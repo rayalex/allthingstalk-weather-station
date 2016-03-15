@@ -21,7 +21,7 @@ void Device::connect() {
   // setup rest
   _rest.begin(API_HOST);
   _rest.setContentType("application/json");
-  
+
   /*setup mqtt events */
   _mqtt.connectedCb.attach(this, &Device::mqttConnected);
   _mqtt.disconnectedCb.attach(this, &Device::mqttDisconnected);
@@ -104,8 +104,16 @@ void Device::mqttData(void* response) {
   uint8_t start = topic.indexOf("asset/") + 6;
   uint8_t end = topic.lastIndexOf("/command");
 
-  Command cmd = {topic.substring(start, end), data};
-  if (_hCommand) _hCommand(cmd);
+  String name = topic.substring(start, end);
+
+  Command cmd(name, data);
+
+  // echo back command to platform to confirm the receipt
+  if (_autoEcho)
+    send(name.c_str(), data.c_str());
+
+  // invoke user callback, if set
+  invokeCommand(cmd);
 }
 
 void Device::wifiCb(void* response) {
