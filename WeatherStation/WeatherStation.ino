@@ -36,8 +36,10 @@ Device device(esp, mqtt, rest, info);
 // Sensors
 Adafruit_BME280 bme;  // on I2C
 
+void log(const char*);
+
 void setupAssets() {
-  debug->println("Setting up device assets...");
+  log("Setting up device assets...");
   device.addAsset(S_TMP, AssetType::sensor, "number");
   device.addAsset(S_PSA, AssetType::sensor, "number");
   device.addAsset(S_HUM, AssetType::sensor, "number");
@@ -54,9 +56,6 @@ void onCommand(Command command) {
     digitalWrite(LED_A, command.value == "true");
   }
 }
-void log(const char* message) {
-  debug->println(message);
-}
 
 void setup() {
   pinMode(LED_A, OUTPUT);
@@ -67,7 +66,7 @@ void setup() {
 
   // setup sensor
   if (!bme.begin(BME_ADDR)) {
-    debug->println("Could not find a valid BME280 sensor, check wiring!");
+    log("Could not find a valid BME280 sensor, check wiring!");
     while (1);
   }
 
@@ -86,7 +85,7 @@ void setup() {
   device.connect();
 
   esp.wifiConnect(WIFI_SSID, WIFI_PASS);
-  debug->println("ARDUINO: system started");
+  log("Sketch started.");
 }
 
 const char* toString(float value) {
@@ -117,10 +116,14 @@ void loop() {
   device.process();
   if (device.isConnected()) {
     if (refresh++ > 500) {
-      debug->println("Update.");
+      log("Update.");
       sense();
       refresh = 0;
     }
     delay(10);
   }
+}
+
+void log(const char* message) {
+  debug->println(message);
 }
