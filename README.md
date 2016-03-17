@@ -1,4 +1,4 @@
-# SmartLiving Weather Station
+# IoT Weather Station
 
 Simple IoT Weather Station using SmartLiving platform, running on Mikroelektronika's Flip&Click (Arduino Due) board.
 
