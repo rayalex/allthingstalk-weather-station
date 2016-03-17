@@ -16,7 +16,6 @@ enum AssetType {
   actuator
 };
 
-
 struct DeviceInfo {
   const char* deviceId;
   const char* clientId;

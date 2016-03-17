@@ -10,6 +10,8 @@ This project aims to demonstrate integration of Mikroelektronika's hardware comp
 
 We're using [BME280][c1c4043e] all-on-one environmental sensor and ESP8266 to communicate data to cloud based system.
 
+The device is sending `temperature`, `humidity`, `pressure` and derived `altitude`. There's also a `LED` actuator which you can toggle from the web to show off push functionality.
+
 ## Ingredients
 
 - Mikroelektronika's [Flip&Click][43250e5f] flavor of Arduino Due
@@ -88,6 +90,51 @@ You should enable `Activity Log` from device settings pane if you'd like to reta
 
 ![Activity](docs/screen_activity.jpg)
 
+## Little bits...
+
+You can adapt this project to your needs, the `Device` API is quite simple:
+
+### Setting assets
+
+You can add `sensors` or `actuators` directly from the device. This is useful in cases where you want devices to provision themselves. Otherwise you can create asset from the web interface and just send/receive data from/to them.
+
+You can use `addAsset(name, type, profileType)` API, e.g.
+
+```
+// four environmental sensors
+device.addAsset(S_TMP, AssetType::sensor, "number");
+device.addAsset(S_PSA, AssetType::sensor, "number");
+device.addAsset(S_HUM, AssetType::sensor, "number");
+device.addAsset(S_ALT, AssetType::sensor, "number");
+
+// and a LED actuator you can toggle
+device.addAsset(A_LED, AssetType::actuator, "boolean");
+```
+
+### Sending data
+
+Use `send(name, value)` API to send data to cloud, e.g.:
+
+```
+device.send("Temperature", "10.0");
+device.send("Door_Lock", "true");
+device.send("Message", "Hello World!");
+```
+
+### Receiving data
+
+If `Command Handler` is attached by using `device.setCommandHandler(&handler)`, the `handler` function will be invoked each time data is sent to your device. You're presented with `Command` structure which contains `name`, identifying the asset, and `value` being value that is sent from Cloud.
+
+### Echoing commands
+
+Sometimes it's useful for a device to confirm it has in fact received data being sent to it (e.g. so that you could verify it has actually been received). You can either do that manually from `Command Handler` by calling `send(name, value)` or setting `device.setAutoEcho(true);`, as in that case the received value will be sent back immediately.
+
+## Bonus
+
+3D printable bracket is included in the [`res`][13a45bb0] directory, in case you'd like to have a nice place to keep your weather station, or hang it up on the wall. Uses `3mm` holes.
+
+Have fun!
+
 [2098bab3]: https://github.com/bblanchon/ArduinoJson "Arduino JSON"
 [6914c721]: https://github.com/adafruit/Adafruit_Sensor "Adafruit Unified Sensor Driver"
 [13fdf1eb]: https://github.com/adafruit/Adafruit_BME280_Library "Adafruit BME280"
@@ -105,3 +152,4 @@ You should enable `Activity Log` from device settings pane if you'd like to reta
 [1d509331]: http://www.mikroe.com/click/weather/ "Weather"
 [c1c4043e]: http://www.bosch-sensortec.com/de/homepage/products_3/environmental_sensors_1/bme280/bme280_1 "BME280"
 [43250e5f]: http://www.mikroe.com/flip-n-click/ "Flip&Click"
+[13a45bb0]: res/ "res"
