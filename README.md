@@ -131,7 +131,7 @@ Sometimes it's useful for a device to confirm it has in fact received data being
 
 ## Bonus
 
-3D printable bracket is included in the [`res`][13a45bb0] directory, in case you'd like to have a nice place to keep your weather station, or hang it up on the wall. Uses `3mm` holes.
+3D printable bracket is included in the [`res`][13a45bb0] directory, in case you'd like to have a nice place to keep your weather station, or hang it up on the wall. Uses `3mm` holes. Also available on [thingiverse] (http://www.thingiverse.com/thing:1422608).
 
 Have fun!
 
