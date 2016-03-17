@@ -100,7 +100,7 @@ You can add `sensors` or `actuators` directly from the device. This is useful in
 
 You can use `addAsset(name, type, profileType)` API, e.g.
 
-```
+```c
 // four environmental sensors
 device.addAsset(S_TMP, AssetType::sensor, "number");
 device.addAsset(S_PSA, AssetType::sensor, "number");
@@ -115,7 +115,7 @@ device.addAsset(A_LED, AssetType::actuator, "boolean");
 
 Use `send(name, value)` API to send data to cloud, e.g.:
 
-```
+```c
 device.send("Temperature", "10.0");
 device.send("Door_Lock", "true");
 device.send("Message", "Hello World!");
