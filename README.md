@@ -150,6 +150,6 @@ Have fun!
 [f3deb3b1]: https://maker.smartliving.io/ "Maker"
 [f990c72e]: http://www.mikroe.com/click/wifi3/ "WiFi3"
 [1d509331]: http://www.mikroe.com/click/weather/ "Weather"
-[c1c4043e]: http://www.bosch-sensortec.com/de/homepage/products_3/environmental_sensors_1/bme280/bme280_1 "BME280"
+[c1c4043e]: https://www.adafruit.com/datasheets/BST-BME280_DS001-10.pdf "BME280"
 [43250e5f]: http://www.mikroe.com/flip-n-click/ "Flip&Click"
 [13a45bb0]: res/ "res"
