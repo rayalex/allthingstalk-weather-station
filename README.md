@@ -1,12 +1,12 @@
 # IoT Weather Station
 
-Simple IoT Weather Station using SmartLiving platform, running on Mikroelektronika's Flip&Click (Arduino Due) board.
+Simple IoT Weather Station using AllThingsTalk platform, running on Mikroelektronika's Flip&Click (Arduino Due) board.
 
 ![Weather Station](docs/weather_station.jpg)
 
 ## What's this all about?
 
-This project aims to demonstrate integration of Mikroelektronika's hardware components with [SmartLiving][281a74e8] ([AllThingsTalk][2ccabd85]) IoT platform.
+This project aims to demonstrate integration of Mikroelektronika's hardware components with [AllThingsTalk][2ccabd85] IoT platform.
 
 We're using [BME280][c1c4043e] all-on-one environmental sensor and ESP8266 to communicate data to cloud based system.
 
@@ -18,7 +18,7 @@ The device is sending `temperature`, `humidity`, `pressure` and derived `altitud
 - [WiFi3 Click][f990c72e] board (ESP8266)
 - [Weather Click][1d509331] board
 - _USB to Serial_ TTL Adapter (for flashing the ESP8266)
-- Account on [SmartLiving Maker][f3deb3b1]
+- Account on [AllThingsTalk Maker][f3deb3b1]
 
 ## Hardware setup
 
@@ -60,15 +60,15 @@ These libraries are required:
 
 ## Connecting to Cloud
 
-We're using SmartLiving as our platform of choice for this IoT project, as we can easily provision custom IoT devices like this one.
+We're using AllThingsTalk as our platform of choice for this IoT project, as we can easily provision custom IoT devices like this one.
 
-After you've created your account on [SmartLiving Maker][f3deb3b1], log in, go to `Playground` if you're not already there.
+After you've created your account on [AllThingsTalk Maker][f3deb3b1], log in, go to `Playground` if you're not already there.
 
 Navigate to `Devices > Make new Device`, pick `Custom`, and name it however you'd like.
 
 You can use `Arduino` type as well, however, once created, device will contain some preset assets which you can delete as we won't be using them here. There's also an example sketch you could use to get up and running quickly, however it's only usable for regular Arduino projects which have on board connectivity (e.g. Arduino Ethernet or Arduino ESP8266 Core).
 
-Next, make a copy of `credentials_sample.h` called `credentials.h` in the same directory and fill in the details (You can find your SmartLiving credentials in the right pane of device page).
+Next, make a copy of `credentials_sample.h` called `credentials.h` in the same directory and fill in the details (You can find your AllThingsTalk credentials in the right pane of device page).
 
 And... we're all set!
 
@@ -82,7 +82,7 @@ Let's assemble the hardware first:
 - Place Weather Click into slot **C**
 - Connect Flip&Click to your computer using USB cable (make sure you use programming port on Flip&Click, one next to power connector), select appropriate port from Arduino IDE and click `Upload`.
 
-You can monitor `debug` output using Arduino's `Serial Monitor`. If your WiFi/SmartLiving credentials are correct you should see assets appearing on the device page and their data being updated in a real time as they arrive.
+You can monitor `debug` output using Arduino's `Serial Monitor`. If your WiFi/AllThingsTalk credentials are correct you should see assets appearing on the device page and their data being updated in a real time as they arrive.
 
 ![Assets](docs/screen_assets.jpg)
 
@@ -144,10 +144,9 @@ Have fun!
 [4284e0fb]: https://en.wikipedia.org/wiki/ESP8266 "ESP8266"
 [382eeed8]: https://github.com/themadinventor/esptool "esptool"
 [da407e76]: https://github.com/nodemcu/nodemcu-flasher "nodemcu-flasher"
-[281a74e8]: http://www.smartliving.io/ "SmartLiving"
 [2ccabd85]: http://allthingstalk.com/ "AllThingsTalk"
 [8903f031]: http://hackaday.com/2015/03/18/how-to-directly-program-an-inexpensive-esp8266-wifi-module/ "HOW TO DIRECTLY PROGRAM AN INEXPENSIVE ESP8266 WIFI MODULE"
-[f3deb3b1]: https://maker.smartliving.io/ "Maker"
+[f3deb3b1]: https://maker.allthingstalk.io/ "Maker"
 [f990c72e]: http://www.mikroe.com/click/wifi3/ "WiFi3"
 [1d509331]: http://www.mikroe.com/click/weather/ "Weather"
 [c1c4043e]: https://www.adafruit.com/datasheets/BST-BME280_DS001-10.pdf "BME280"
