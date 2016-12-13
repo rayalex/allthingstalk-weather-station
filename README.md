@@ -146,7 +146,7 @@ Have fun!
 [da407e76]: https://github.com/nodemcu/nodemcu-flasher "nodemcu-flasher"
 [2ccabd85]: http://allthingstalk.com/ "AllThingsTalk"
 [8903f031]: http://hackaday.com/2015/03/18/how-to-directly-program-an-inexpensive-esp8266-wifi-module/ "HOW TO DIRECTLY PROGRAM AN INEXPENSIVE ESP8266 WIFI MODULE"
-[f3deb3b1]: https://maker.allthingstalk.io/ "Maker"
+[f3deb3b1]: https://maker.allthingstalk.com/ "Maker"
 [f990c72e]: http://www.mikroe.com/click/wifi3/ "WiFi3"
 [1d509331]: http://www.mikroe.com/click/weather/ "Weather"
 [c1c4043e]: https://www.adafruit.com/datasheets/BST-BME280_DS001-10.pdf "BME280"
