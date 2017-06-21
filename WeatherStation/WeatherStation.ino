@@ -88,10 +88,10 @@ void setup() {
   log("Sketch started.");
 }
 
-const char* toString(float value) {
+String toString(float value) {
   char buffer[12];
   sprintf(buffer, "%.2f", value);
-  return buffer;
+  return String(buffer);
 }
 
 void sense() {
@@ -102,10 +102,10 @@ void sense() {
   float altitude = bme.readAltitude(SEALEVELPRESSURE_HPA);
   float humidity = bme.readHumidity();
 
-  device.send(S_TMP, toString(temperature));
-  device.send(S_PSA, toString(pressure));
-  device.send(S_HUM, toString(humidity));
-  device.send(S_ALT, toString(altitude));
+  device.send(S_TMP, toString(temperature).c_str());
+  device.send(S_PSA, toString(pressure).c_str());
+  device.send(S_HUM, toString(humidity).c_str());
+  device.send(S_ALT, toString(altitude).c_str());
 
   digitalWrite(LED_C, LOW);
 }
